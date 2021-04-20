@@ -4,14 +4,15 @@ import {
   NORMAL_FONT,
   WHITE_COLOR,
   BUTTON_DISABLED_COLOR,
-  EIGHT_UNIT,
   DOUBLE_UNIT,
+  SINGLE_UNIT,
   TRIPLE_UNIT,
 } from '@/themes'
 
 export const ButtonContainer = styled.TouchableOpacity`
-  padding: ${DOUBLE_UNIT} ${TRIPLE_UNIT};
-  border-radius: ${EIGHT_UNIT};
+  margin: ${SINGLE_UNIT} ${TRIPLE_UNIT};
+  padding: ${SINGLE_UNIT};
+  border-radius: ${DOUBLE_UNIT};
   background-color: ${props => (!props.disabled ? props.bgColor : BUTTON_DISABLED_COLOR)};
 `
 

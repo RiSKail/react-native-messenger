@@ -1,10 +1,14 @@
 import React, { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { GiftedChat } from 'react-native-gifted-chat'
-import { View } from 'react-native'
+import { launchImageLibrary } from 'react-native-image-picker';
+
+import CustomButton from '@/components/controls/Button'
 
 import { setMessage } from '@/actions'
-import { BG_GRADIENT_COLOR } from '@/themes'
+import { BUTTON_COLOR } from '@/themes'
+import internalization from '@/internalization'
+
 import { PageContainer } from './styles'
 
 const Messenger = () => {
@@ -15,9 +19,43 @@ const Messenger = () => {
     dispatch(setMessage(message[0]))
   }, [])
 
+  const chooseFile = (type) => {
+    const options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        alert(internalization.camera_unavailable);
+        return;
+      } else if (response.errorCode == 'permission') {
+        alert(internalization.permission);
+        return;
+      } else if (response.errorCode == 'others') {
+        alert(response.errorMessage);
+        return;
+      }
+
+      dispatch(setMessage({
+        _id: `${messagesStore.length + 1}`,
+        createdAt: new Date(),
+        user: {
+          _id: 1,
+          name: 'React Native',
+          avatar: 'https://placeimg.com/140/140/any',
+        },
+        image: response.uri,
+      }))
+    });
+  };
 
   return (
-    <View style={{ flex: 1 }}>
+    <PageContainer>
       <GiftedChat
         messages={messagesStore}
         onSend={messages => onSend(messages)}
@@ -25,7 +63,11 @@ const Messenger = () => {
           _id: 1,
         }}
       />
-    </View>
+      <CustomButton
+        onPress={() => chooseFile('photo')}
+        title={internalization.photo}
+        bgColor={BUTTON_COLOR} />
+    </PageContainer>
   )
 }
 

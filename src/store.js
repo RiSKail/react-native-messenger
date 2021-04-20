@@ -2,7 +2,7 @@ import { createStore } from 'redux'
 
 import reducer from '@/reducer'
 
-let store= null
+let store = null
 
 const createDevelopmentStore = () =>
   createStore(reducer)
